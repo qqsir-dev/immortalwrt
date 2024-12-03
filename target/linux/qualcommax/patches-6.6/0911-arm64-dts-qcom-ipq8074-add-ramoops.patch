@@ -5,7 +5,7 @@
  			reg = <0x0 0x51000000 0x0 0x00100000>;
  		};
 +
-+		ramoops_region: ramoops@51200000 {
++		ramoops_region: memory@51200000 {
 +			compatible = "ramoops";
 +			reg = <0x0 0x51200000 0x0 0x00100000>;
 +			no-map;
