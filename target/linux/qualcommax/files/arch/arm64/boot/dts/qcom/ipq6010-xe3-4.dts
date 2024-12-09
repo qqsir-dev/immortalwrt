@@ -242,7 +242,6 @@
 &dp5 {
 	status = "okay";
 
-	phy-mode = "sgmii";
 	phy-handle = <&qca8081>;
 	nvmem-cell-names = "mac-address";
 	nvmem-cells = <&ethaddr 0>;
