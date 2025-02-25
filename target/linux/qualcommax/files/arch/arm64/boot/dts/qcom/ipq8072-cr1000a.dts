@@ -191,7 +191,7 @@
 
 &dp5_syn {
 	status = "okay";
-	phy-handle = <&rtl9301>;
+	phy-handle = <&rtl9303>;
 	label = "lan";
 };
 
