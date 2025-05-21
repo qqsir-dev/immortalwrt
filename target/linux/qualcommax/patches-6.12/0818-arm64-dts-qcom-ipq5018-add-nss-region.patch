@@ -1,6 +1,6 @@
 --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
 +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-@@ -113,6 +113,11 @@
+@@ -111,6 +111,11 @@
  		#size-cells = <2>;
  		ranges;
  

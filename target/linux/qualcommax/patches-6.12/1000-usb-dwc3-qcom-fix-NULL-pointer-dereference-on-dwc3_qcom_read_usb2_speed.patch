@@ -127,8 +127,8 @@ Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
 --- a/drivers/usb/dwc3/dwc3-qcom.c
 +++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -324,13 +324,15 @@ static bool dwc3_qcom_is_host(struct dwc
- static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+@@ -320,13 +320,15 @@ static bool dwc3_qcom_is_host(struct dwc
+ static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom, int port_index)
  {
  	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
 -	struct usb_device *udev;
@@ -142,5 +142,5 @@ Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 +	if (!hcd)
 +		return USB_SPEED_UNKNOWN;
  
- 	/*
- 	 * It is possible to query the speed of all children of
+ #ifdef CONFIG_USB
+ 	udev = usb_hub_find_child(hcd->self.root_hub, port_index + 1);

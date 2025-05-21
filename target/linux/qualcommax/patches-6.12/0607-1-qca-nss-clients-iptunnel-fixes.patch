@@ -8,7 +8,7 @@ Includes iptunnel fixes by integrating the following patches:
 
 --- a/net/ipv6/ip6_tunnel.c
 +++ b/net/ipv6/ip6_tunnel.c
-@@ -849,7 +849,7 @@ static void ip4ip6_fmr_calc(struct in6_a
+@@ -851,7 +851,7 @@ static void ip4ip6_fmr_calc(struct in6_a
  	use_dest_addr = (xmit && dsth == iph) || (!xmit && dsth != iph);
  
  	/* get dst port */
@@ -17,7 +17,7 @@ Includes iptunnel fixes by integrating the following patches:
  		dsth->protocol == IPPROTO_UDP ||
  		dsth->protocol == IPPROTO_TCP ||
  		dsth->protocol == IPPROTO_SCTP ||
-@@ -864,9 +864,9 @@ static void ip4ip6_fmr_calc(struct in6_a
+@@ -866,9 +866,9 @@ static void ip4ip6_fmr_calc(struct in6_a
  		struct icmphdr *ih = (struct icmphdr*)(((u8*)dsth) + dsth->ihl * 4);
  
  		/* use icmp identifier as port */
@@ -30,7 +30,7 @@ Includes iptunnel fixes by integrating the following patches:
  			ih->type == ICMP_TIMESTAMPREPLY ||
  			ih->type == ICMP_INFO_REPLY ||
  			ih->type == ICMP_ADDRESSREPLY)) ||
-@@ -883,7 +883,7 @@ static void ip4ip6_fmr_calc(struct in6_a
+@@ -885,7 +885,7 @@ static void ip4ip6_fmr_calc(struct in6_a
  		int frombyte = fmr->ip6_prefix_len / 8;
  		int fromrem = fmr->ip6_prefix_len % 8;
  		int bytes = sizeof(struct in6_addr) - frombyte;
@@ -49,7 +49,7 @@ Includes iptunnel fixes by integrating the following patches:
  	gro_cells_receive(&tunnel->gro_cells, skb);
  	return 0;
  
-@@ -1424,6 +1427,9 @@ route_lookup:
+@@ -1426,6 +1429,9 @@ route_lookup:
  	ipv6h->nexthdr = proto;
  	ipv6h->saddr = fl6->saddr;
  	ipv6h->daddr = fl6->daddr;
@@ -59,7 +59,7 @@ Includes iptunnel fixes by integrating the following patches:
  	ip6tunnel_xmit(NULL, skb, dev);
  	return 0;
  tx_err_link_failure:
-@@ -1540,17 +1546,19 @@ ipxip6_tnl_xmit(struct sk_buff *skb, str
+@@ -1542,17 +1548,19 @@ ipxip6_tnl_xmit(struct sk_buff *skb, str
  	fl6.flowi6_uid = sock_net_uid(dev_net(dev), NULL);
  	dsfield = INET_ECN_encapsulate(dsfield, orig_dsfield);
  
@@ -130,7 +130,7 @@ Includes iptunnel fixes by integrating the following patches:
  	if (dev) {
 --- a/net/ipv6/sit.c
 +++ b/net/ipv6/sit.c
-@@ -722,6 +722,8 @@ static int ipip6_rcv(struct sk_buff *skb
+@@ -724,6 +724,8 @@ static int ipip6_rcv(struct sk_buff *skb
  
  		dev_sw_netstats_rx_add(tunnel->dev, skb->len);
  
@@ -139,7 +139,7 @@ Includes iptunnel fixes by integrating the following patches:
  		netif_rx(skb);
  
  		return 0;
-@@ -1031,6 +1033,8 @@ static netdev_tx_t ipip6_tunnel_xmit(str
+@@ -1033,6 +1035,8 @@ static netdev_tx_t ipip6_tunnel_xmit(str
  
  	skb_set_inner_ipproto(skb, IPPROTO_IPV6);
  
