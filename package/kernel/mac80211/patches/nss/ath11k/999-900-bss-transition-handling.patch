@@ -443,13 +443,16 @@
  		peer_mac_h16 = FIELD_GET(HTT_T2H_PEER_UNMAP_INFO1_MAC_ADDR_H16,
  					 resp->peer_unmap_ev.info1);
  		ath11k_dp_get_mac_addr(resp->peer_map_ev.mac_addr_l32,
-@@ -2212,7 +2225,10 @@ void ath11k_dp_htt_htc_t2h_msg_handler(s
+@@ -2212,7 +2225,13 @@ void ath11k_dp_htt_htc_t2h_msg_handler(s
  				   resp->peer_unmap_ev.info1);
  		free_wds_count = FIELD_GET(HTT_T2H_PEER_UNMAP_INFO3_WDS_FREE_COUNT,
  					   resp->peer_unmap_ev.info3);
 -		ath11k_peer_unmap_v2_event(ab, peer_id, mac_addr, is_wds, free_wds_count);
 +		rcu_read_lock();
-+		ar = ath11k_mac_get_ar_by_vdev_id(ab, vdev_id);
++		if (vdev_id < ab->num_radios)
++			ar = ab->pdevs[vdev_id].ar;
++		else
++			ar = NULL;
 +		ath11k_peer_unmap_v2_event(ar, peer_id, mac_addr, is_wds, free_wds_count);
 +		rcu_read_unlock();
  		break;
