@@ -20,15 +20,27 @@
  	mutex_init(&ab->base_ast_lock);
  	spin_lock_init(&ab->base_lock);
  	mutex_init(&ab->vdev_id_11d_lock);
-@@ -2401,8 +2400,6 @@ struct ath11k_base *ath11k_core_alloc(st
+@@ -2401,6 +2401,20 @@ struct ath11k_base *ath11k_core_alloc(st
  	init_completion(&ab->reconfigure_complete);
  	init_completion(&ab->recovery_start);
  
--	INIT_LIST_HEAD(&ab->peers);
--	init_waitqueue_head(&ab->peer_mapping_wq);
- 	init_waitqueue_head(&ab->wmi_ab.tx_credits_wq);
++	/* 初始化每个radio的peer数据结构 */
++	for (i = 0; i < ab->num_radios; i++) {
++		struct ath11k *ar = ab->pdevs[i].ar;
++
++		if (!ar)
++			continue;
++
++		INIT_LIST_HEAD(&ar->peers);
++		init_waitqueue_head(&ar->peer_mapping_wq);
++		mutex_init(&ar->tbl_mtx_lock);
++		rhashtable_init(ar->rhead_peer_addr, &ar->rhash_peer_addr_param);
++		rhashtable_init(ar->rhead_peer_id, &ar->rhash_peer_id_param);
++	}
++
  	init_waitqueue_head(&ab->qmi.cold_boot_waitq);
  	INIT_WORK(&ab->restart_work, ath11k_core_restart);
+
 --- a/drivers/net/wireless/ath/ath11k/core.h
 +++ b/drivers/net/wireless/ath/ath11k/core.h
 @@ -750,9 +750,22 @@ struct ath11k {
@@ -443,16 +455,13 @@
  		peer_mac_h16 = FIELD_GET(HTT_T2H_PEER_UNMAP_INFO1_MAC_ADDR_H16,
  					 resp->peer_unmap_ev.info1);
  		ath11k_dp_get_mac_addr(resp->peer_map_ev.mac_addr_l32,
-@@ -2212,7 +2225,13 @@ void ath11k_dp_htt_htc_t2h_msg_handler(s
+@@ -2212,7 +2225,10 @@ void ath11k_dp_htt_htc_t2h_msg_handler(s
  				   resp->peer_unmap_ev.info1);
  		free_wds_count = FIELD_GET(HTT_T2H_PEER_UNMAP_INFO3_WDS_FREE_COUNT,
  					   resp->peer_unmap_ev.info3);
 -		ath11k_peer_unmap_v2_event(ab, peer_id, mac_addr, is_wds, free_wds_count);
 +		rcu_read_lock();
-+		if (vdev_id < ab->num_radios)
-+			ar = ab->pdevs[vdev_id].ar;
-+		else
-+			ar = NULL;
++		ar = ath11k_mac_get_ar_by_vdev_id(ab, vdev_id);
 +		ath11k_peer_unmap_v2_event(ar, peer_id, mac_addr, is_wds, free_wds_count);
 +		rcu_read_unlock();
  		break;
