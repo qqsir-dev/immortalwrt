@@ -9,55 +9,6 @@
 	compatible = "linksys,mx2000", "qcom,ipq5018";
 };
 
-&dp1 {
-	status = "okay";
-};
-
-&dp2 {
-	status = "okay";
-
-	nvmem-cells = <&hw_mac_addr 0>;
-	nvmem-cell-names = "mac-address";
-
-	fixed-link {
-		speed = <1000>;
-		full-duplex;
-	};
-};
-
-&switch1 {
-	ports {
-		port@2 {
-			label = "wan";
-		};
-
-		port@3 {
-			label = "lan3";
-		};
-
-		port@4 {
-			label = "lan2";
-		};
-
-		port@5 {
-			label = "lan1";
-		};
-
-		port@6 {
-			reg = <6>;
-			label = "cpu";
-			phy-mode = "sgmii";
-			ethernet = <&dp2>;
-			qca,sgmii-enable-pll;
-
-			fixed-link {
-				speed = <1000>;
-				full-duplex;
-			};
-		};
-	};
-};
-
 &q6v5_wcss {
 	status = "okay";
 	boot-args = <0x01 0x04 0x02 0x0f 0x00 0x00>;

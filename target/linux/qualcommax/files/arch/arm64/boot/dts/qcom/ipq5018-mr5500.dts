@@ -29,154 +29,128 @@
 	};
 };
 
-&dp1 {
-	status = "okay";
-};
-
-&dp2 {
+&mdio1 {
 	status = "okay";
 
-	nvmem-cells = <&hw_mac_addr 0>;
-	nvmem-cell-names = "mac-address";
-
-	fixed-link {
-		speed = <1000>;
-		full-duplex;
+	qca8337_0: ethernet-phy@0 {
+		reg = <0>;
 	};
-};
 
-&switch1 {
-	ports {
-		port@1 {
-			label = "lan1";
-			phy-mode = "internal";
+	switch1: ethernet-switch@17 {
+		ports {
+			port@1 {
+				reg = <1>;
+				label = "lan1";
+				phy-handle = <&qca8337_0>;
+				phy-mode = "internal";
 
-			leds {
-				#address-cells = <1>;
-				#size-cells = <0>;
+				leds {
+					led@0 {
+						reg = <0>;
+						color = <LED_COLOR_ID_GREEN>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
 
-				led@0 {
-					reg = <0>;
-					color = <LED_COLOR_ID_GREEN>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
-				};
-
-				led@1 {
-					reg = <1>;
-					color = <LED_COLOR_ID_AMBER>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
-				};
-			};
-		};
-
-		port@2 {
-			label = "lan2";
-			phy-mode = "internal";
-
-			leds {
-				#address-cells = <1>;
-				#size-cells = <0>;
-
-				led@0 {
-					reg = <0>;
-					color = <LED_COLOR_ID_GREEN>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
-				};
-
-				led@1 {
-					reg = <1>;
-					color = <LED_COLOR_ID_AMBER>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
+					led@1 {
+						reg = <1>;
+						color = <LED_COLOR_ID_AMBER>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
 				};
 			};
-		};
 
-		port@3 {
-			label = "lan3";
-			phy-mode = "internal";
+			port@2 {
+				reg = <2>;
+				label = "lan2";
+				phy-handle = <&qca8337_1>;
+				phy-mode = "internal";
 
-			leds {
-				#address-cells = <1>;
-				#size-cells = <0>;
+				leds {
+					led@0 {
+						reg = <0>;
+						color = <LED_COLOR_ID_GREEN>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
 
-				led@0 {
-					reg = <0>;
-					color = <LED_COLOR_ID_GREEN>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
-				};
-
-				led@1 {
-					reg = <1>;
-					color = <LED_COLOR_ID_AMBER>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
-				};
-			};
-		};
-
-		port@4 {
-			label = "lan4";
-			phy-mode = "internal";
-
-			leds {
-				#address-cells = <1>;
-				#size-cells = <0>;
-
-				led@0 {
-					reg = <0>;
-					color = <LED_COLOR_ID_GREEN>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
-				};
-
-				led@1 {
-					reg = <1>;
-					color = <LED_COLOR_ID_AMBER>;
-					function = LED_FUNCTION_LAN;
-					default-state = "keep";
+					led@1 {
+						reg = <1>;
+						color = <LED_COLOR_ID_AMBER>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
 				};
 			};
-		};
 
-		port@5 {
-			label = "wan";
-			phy-mode = "internal";
+			port@3 {
+				reg = <3>;
+				label = "lan3";
+				phy-handle = <&qca8337_2>;
+				phy-mode = "internal";
 
-			leds {
-				#address-cells = <1>;
-				#size-cells = <0>;
+				leds {
+					led@0 {
+						reg = <0>;
+						color = <LED_COLOR_ID_GREEN>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
 
-				led@0 {
-					reg = <0>;
-					color = <LED_COLOR_ID_GREEN>;
-					function = LED_FUNCTION_WAN;
-					default-state = "keep";
-				};
-
-				led@1 {
-					reg = <1>;
-					color = <LED_COLOR_ID_AMBER>;
-					function = LED_FUNCTION_WAN;
-					default-state = "keep";
+					led@1 {
+						reg = <1>;
+						color = <LED_COLOR_ID_AMBER>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
 				};
 			};
-		};
 
-		port@6 {
-			reg = <6>;
-			label = "cpu";
-			phy-mode = "sgmii";
-			ethernet = <&dp2>;
-			qca,sgmii-enable-pll;
+			port@4 {
+				reg = <4>;
+				label = "lan4";
+				phy-handle = <&qca8337_3>;
+				phy-mode = "internal";
 
-			fixed-link {
-				speed = <1000>;
-				full-duplex;
+				leds {
+					led@0 {
+						reg = <0>;
+						color = <LED_COLOR_ID_GREEN>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
+
+					led@1 {
+						reg = <1>;
+						color = <LED_COLOR_ID_AMBER>;
+						function = LED_FUNCTION_LAN;
+						default-state = "keep";
+					};
+				};
+			};
+
+			port@5 {
+				reg = <5>;
+				label = "wan";
+				phy-handle = <&qca8337_4>;
+				phy-mode = "internal";
+
+				leds {
+					led@0 {
+						reg = <0>;
+						color = <LED_COLOR_ID_GREEN>;
+						function = LED_FUNCTION_WAN;
+						default-state = "keep";
+					};
+
+					led@1 {
+						reg = <1>;
+						color = <LED_COLOR_ID_AMBER>;
+						function = LED_FUNCTION_WAN;
+						default-state = "keep";
+					};
+				};
 			};
 		};
 	};

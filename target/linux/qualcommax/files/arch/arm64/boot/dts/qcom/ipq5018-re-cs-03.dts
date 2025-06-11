@@ -74,6 +74,19 @@
 	};
 };
 
+&sdhc_1 {
+	status = "okay";
+
+	pinctrl-0 = <&emmc_pins>;
+	pinctrl-names = "default";
+
+	max-frequency = <192000000>;
+
+	/delete-property/ mmc-hs400-1_8v;
+	mmc-hs200-1_8v;
+	mmc-ddr-1_8v;
+};
+
 &dp1 {
 	status = "okay";
 };
@@ -87,52 +100,74 @@
 	};
 };
 
-&switch1 {
-	reg = <0x18>;
+&mdio1 {
+	status = "okay";
 
-	ports {
-		port@0 {
-			label = "lan1";
-		};
+	pinctrl-0 = <&mdio1_pins>;
+	pinctrl-names = "default";
+	reset-gpios = <&tlmm 39 GPIO_ACTIVE_LOW>;
 
-		port@1 {
-			label = "lan2";
-		};
+	qca8337_0: ethernet-phy@0 {
+		reg = <0>;
+	};
 
-		port@2 {
-			label = "lan3";
-		};
+	qca8337_1: ethernet-phy@1 {
+		reg = <1>;
+	};
 
-		port@3 {
-			label = "wan";
-		};
+	qca8337_2: ethernet-phy@2 {
+		reg = <2>;
+	};
 
-		port@6 {
-			reg = <6>;
-			label = "cpu";
-			phy-mode = "sgmii";
-			ethernet = <&dp2>;
-			qca,sgmii-enable-pll;
+	qca8337_3: ethernet-phy@3 {
+		reg = <3>;
+	};
 
-			fixed-link {
-				speed = <1000>;
-				full-duplex;
+	switch1: ethernet-switch@17 {
+		compatible = "qca,qca8337";
+		reg = <17>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ports {
+			port@0 {
+				reg = <0>;
+				label = "cpu";
+				phy-mode = "sgmii";
+				ethernet = <&dp2>;
+				qca,sgmii-enable-pll;
+
+				fixed-link {
+					speed = <1000>;
+					full-duplex;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				label = "lan3";
+				phy-handle = <&qca8337_0>;
+			};
+
+			port@2 {
+				reg = <2>;
+				label = "lan2";
+				phy-handle = <&qca8337_1>;
+			};
+
+			port@3 {
+				reg = <3>;
+				label = "lan1";
+				phy-handle = <&qca8337_2>;
+			};
+
+			port@4 {
+				reg = <4>;
+				label = "wan";
+				phy-handle = <&qca8337_3>;
 			};
 		};
 	};
-};
-
-&sdhc_1 {
-	status = "okay";
-
-	pinctrl-0 = <&emmc_pins>;
-	pinctrl-names = "default";
-
-	max-frequency = <192000000>;
-
-	/delete-property/ mmc-hs400-1_8v;
-	mmc-hs200-1_8v;
-	mmc-ddr-1_8v;
 };
 
 &q6v5_wcss {

@@ -42,12 +42,12 @@
 +			no-map;
 +		};
 +
-+		q6_mem_regions: q6_mem@4b000000 {
++		q6_mem_region: q6_mem@4b000000 {
 +			reg = <0x0 0x4b000000 0x0 0x4000000>;
 +			no-map;
 +		};
 +
-+		q6_code_data_regions: q6_code_data@4f000000 {
++		q6_code_data_region: q6_code_data@4f000000 {
 +			reg = <0x0 0x4f000000 0x0 0x1000000>;
  			no-map;
  		};
